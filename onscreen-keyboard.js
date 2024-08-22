@@ -1,5 +1,5 @@
 const Keyboard = {
-    selectedElement: "",
+    selectedElement: null,
     elements: {
         main: null,
         keysContainer: null,
@@ -123,7 +123,7 @@ const Keyboard = {
         });
 
         // Create and dispatch keyboard simulated Event
-        if (this.selectedElement != '') Keyboard.selectedElement.dispatchEvent(evt);
+        if (this.selectedElement !== null) Keyboard.selectedElement.dispatchEvent(evt);
     },
 
     _triggerEvent(handlerName) {
@@ -143,7 +143,7 @@ const Keyboard = {
 
     close() {
         this.properties.value = "";
-        this.selectedElement = "";
+        this.selectedElement = null;
         this.eventHandlers.oninput = oninput;
         this.eventHandlers.onclose = onclose;
         // this.elements.main.classList.add("keyboard--hidden");
