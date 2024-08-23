@@ -1,5 +1,6 @@
 const Keyboard = {
     selectedElement: null,
+    selectedValue: "",
     elements: {
         main: null,
         keysContainer: null,
@@ -8,10 +9,6 @@ const Keyboard = {
     eventHandlers: {
         oninput: null,
         onclose: null
-    },
-
-    properties: {
-        value: ""
     },
 
     init() {
@@ -23,25 +20,20 @@ const Keyboard = {
         Keyboard.elements.main.classList.add("keyboard");
         Keyboard.elements.keysContainer.classList.add("keyboard__keys");
 
-        // Keyboard.elements.keys = Keyboard.elements.keysContainer.querySelectorAll(".keyboard__key");
-        Keyboard._setupKeyboard();
+        // Keyboard._setupKeyboard();
+        Keyboard.elements.keysContainer.appendChild(Keyboard._createKeys());
         Keyboard.elements.main.appendChild(Keyboard.elements.keysContainer);
         document.querySelector('body').appendChild(Keyboard.elements.main);
 
         document.addEventListener('click', function (event) {
             if (event.target.matches('input[type="number"],input[type="text"]')) {
-                // Keyboard._setupKeyboard();
                 Keyboard.selectedElement = event.target;
-                Keyboard.open(event.target.value, currentValue => {
-                    event.target.value = currentValue;
-                });
+                Keyboard.open(event.target.value,
+                    currentValue => {
+                        event.target.value = currentValue;
+                    });
             }
         }, true);
-    },
-
-    _setupKeyboard() {
-        Keyboard.elements.keysContainer.innerHTML = "";
-        Keyboard.elements.keysContainer.appendChild(Keyboard._createKeys());
     },
 
     _createKeys() {
@@ -71,7 +63,7 @@ const Keyboard = {
                         keyElement.innerHTML = createIconHTML("backspace");
 
                         keyElement.addEventListener("click", () => {
-                            this.properties.value = this.properties.value.substring(0, this.properties.value.length - 1);
+                            this.selectedValue = this.selectedValue.substring(0, this.selectedValue.length - 1);
                             this._triggerEvent("oninput");
                         });
                         break;
@@ -81,7 +73,7 @@ const Keyboard = {
                         keyElement.innerHTML = createIconHTML("keyboard_return");
 
                         keyElement.addEventListener("click", () => {
-                            this.properties.value += "\n";
+                            this.selectedValue += "\n";
                             this._triggerEvent("oninput");
                         });
                         break;
@@ -92,18 +84,18 @@ const Keyboard = {
 
                         keyElement.addEventListener("click", () => {
                             this.close();
-                            this._triggerEvent("onclose");
+                            // this._triggerEvent("onclose");
                         });
                         break;
 
                     default:
                         keyElement.textContent = key;
                         keyElement.addEventListener("click", () => {
-                            this.properties.value += key;
+                            this.selectedValue += key;
                             this._triggerEvent("oninput");
 
-                            // Propagate Keyboard event
-                            this._fireKeyEvent();
+                            // Propagate Keyboard event ???
+                            // this._fireKeyEvent();
                         });
                         break;
                 }
@@ -127,26 +119,24 @@ const Keyboard = {
     },
 
     _triggerEvent(handlerName) {
+        console.log(handlerName);
+        console.log(this.eventHandlers[handlerName]);
         if (typeof this.eventHandlers[handlerName] == "function") {
-            console.log(this.eventHandlers[handlerName]);
-            this.eventHandlers[handlerName](this.properties.value);
+            this.eventHandlers[handlerName](this.selectedValue);
         }
     },
 
     open(initialValue, oninput, onclose) {
-        this.properties.value = initialValue || "";
+        this.selectedValue = initialValue || "";
         this.eventHandlers.oninput = oninput;
-        this.eventHandlers.onclose = onclose;
-        // this.elements.main.classList.remove("keyboard--hidden");
-
+        // this.eventHandlers.onclose = onclose;
     },
 
     close() {
-        this.properties.value = "";
+        this.selectedValue = "";
         this.selectedElement = null;
-        this.eventHandlers.oninput = oninput;
-        this.eventHandlers.onclose = onclose;
-        // this.elements.main.classList.add("keyboard--hidden");
+        this.eventHandlers.oninput = null;
+        // this.eventHandlers.onclose = onclose;
     }
 };
 
