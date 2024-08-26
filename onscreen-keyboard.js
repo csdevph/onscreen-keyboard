@@ -1,5 +1,4 @@
 const Keyboard = {
-    selectedElement: null,
     selectedValue: "",
     elements: {
         main: null,
@@ -10,6 +9,11 @@ const Keyboard = {
         oninput: null,
         onclose: null
     },
+    keyLayout: [
+        ["7", "8", "9", "+"],
+        ["4", "5", "6", "backspace"],
+        ["1", "2", "3", "0"]
+    ],
 
     init() {
         // Create main elements
@@ -25,31 +29,24 @@ const Keyboard = {
         Keyboard.elements.main.appendChild(Keyboard.elements.keysContainer);
         document.querySelector('body').appendChild(Keyboard.elements.main);
 
-        document.addEventListener('click', function (event) {
+        document.body.addEventListener('click', function (event) {
             if (event.target.matches('input[type="number"],input[type="text"]')) {
-                Keyboard.selectedElement = event.target;
                 Keyboard.open(event.target.value,
-                    currentValue => {
-                        event.target.value = currentValue;
-                    });
+                    currentValue => { event.target.value = currentValue }
+                );
             }
         }, true);
     },
 
     _createKeys() {
         const fragment = document.createDocumentFragment();
-        const keyLayout = [
-            ["7", "8", "9", "backspace"],
-            ["4", "5", "6", "done"],
-            ["1", "2", "3", "0"]
-        ];
 
         // Creates HTML for an icon
         const createIconHTML = (icon_name) => {
             return `<i class="material-icons">${icon_name}</i>`;
         };
 
-        keyLayout.forEach(keyRow => {
+        this.keyLayout.forEach(keyRow => {
             keyRow.forEach(key => {
                 const keyElement = document.createElement("button");
 
@@ -59,7 +56,6 @@ const Keyboard = {
 
                 switch (key) {
                     case "backspace":
-                        // keyElement.classList.add("backspace-btn");
                         keyElement.innerHTML = createIconHTML("backspace");
 
                         keyElement.addEventListener("click", () => {
@@ -69,7 +65,6 @@ const Keyboard = {
                         break;
 
                     case "enter":
-                        // keyElement.classList.add("keyboard__key--wide");
                         keyElement.innerHTML = createIconHTML("keyboard_return");
 
                         keyElement.addEventListener("click", () => {
@@ -79,23 +74,19 @@ const Keyboard = {
                         break;
 
                     case "done":
-                        keyElement.classList.add("keyboard__key--dark");
                         keyElement.innerHTML = createIconHTML("check_circle");
 
                         keyElement.addEventListener("click", () => {
                             this.close();
-                            // this._triggerEvent("onclose");
                         });
                         break;
 
                     default:
                         keyElement.textContent = key;
+
                         keyElement.addEventListener("click", () => {
                             this.selectedValue += key;
                             this._triggerEvent("oninput");
-
-                            // Propagate Keyboard event ???
-                            // this._fireKeyEvent();
                         });
                         break;
                 }
@@ -107,34 +98,22 @@ const Keyboard = {
         return fragment;
     },
 
-    _fireKeyEvent() {
-        let evt = new KeyboardEvent("input", {
-            bubbles: true,
-            cancelable: true,
-            view: window
-        });
-
-        // Create and dispatch keyboard simulated Event
-        if (this.selectedElement !== null) Keyboard.selectedElement.dispatchEvent(evt);
-    },
-
     _triggerEvent(handlerName) {
-        console.log(handlerName);
-        console.log(this.eventHandlers[handlerName]);
-        if (typeof this.eventHandlers[handlerName] == "function") {
-            this.eventHandlers[handlerName](this.selectedValue);
+        if (typeof this.eventHandlers[handlerName] !== "function") {
+            console.log(this.eventHandlers[handlerName]);
+            return;
         }
+        this.eventHandlers[handlerName](this.selectedValue);
     },
 
-    open(initialValue, oninput, onclose) {
+    open(initialValue, oninputHandler, oncloseHandler) {
         this.selectedValue = initialValue || "";
-        this.eventHandlers.oninput = oninput;
-        // this.eventHandlers.onclose = onclose;
+        this.eventHandlers.oninput = oninputHandler;
+        // this.eventHandlers.onclose = oncloseHandler;
     },
 
     close() {
         this.selectedValue = "";
-        this.selectedElement = null;
         this.eventHandlers.oninput = null;
         // this.eventHandlers.onclose = onclose;
     }
