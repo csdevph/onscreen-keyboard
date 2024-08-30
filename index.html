@@ -5,23 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clavier virtuel</title>
 
-  <script src="onscreen-keyboard.js"></script>
+  <script src="onscreen-keyboard.js" defer></script>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
   <div class="mb-3">
-    <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Email" readonly>
-    </div>
-
-    <input type="number" placeholder="Phone number" readonly>
-
+    <input type="text" class="use-keyboard" placeholder="Email" readonly>
+    <input type="number" class="use-keyboard" placeholder="Phone number" readonly>
+    <input type="number" class="use-keyboard" maxlength="3" readonly>
+    <button>Go</button>
   </div>
   <div>
-    <input type="number" readonly>
-    <button>Go</button>
+    <input type="text" class="use-keyboard" id="">
   </div>
 
 </body>
