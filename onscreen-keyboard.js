@@ -15,27 +15,31 @@ const Keyboard = {
         ["1", "2", "3", "0"]
     ],
 
-    init() {
+    init(inputContainer) {
         // Create main elements
-        Keyboard.elements.main = document.createElement("div");
-        Keyboard.elements.keysContainer = document.createElement("div");
+        this.elements.main = document.createElement("div");
+        this.elements.keysContainer = document.createElement("div");
 
         // Setup main elements
-        Keyboard.elements.main.classList.add("keyboard");
-        Keyboard.elements.keysContainer.classList.add("keyboard__keys");
+        this.elements.main.addEventListener("click", (e) => { e.stopPropagation() });
+        this.elements.main.classList.add("keyboard");
+        this.elements.keysContainer.classList.add("keyboard__keys");
 
-        // Keyboard._setupKeyboard();
-        Keyboard.elements.keysContainer.appendChild(Keyboard._createKeys());
-        Keyboard.elements.main.appendChild(Keyboard.elements.keysContainer);
-        document.querySelector('body').appendChild(Keyboard.elements.main);
+        // setup Keyboard
+        this.elements.keysContainer.appendChild(this._createKeys());
+        this.elements.main.appendChild(this.elements.keysContainer);
+        document.querySelector('body').appendChild(this.elements.main);
 
-        document.body.addEventListener('click', function (event) {
-            if (event.target.matches('input[type="number"],input[type="text"]')) {
+        document.body.addEventListener('click', this.close);
+
+        document.querySelector(inputContainer).addEventListener('click', function (event) {
+            if (event.target.matches('.use-keyboard')) {
+                event.stopPropagation();
                 Keyboard.open(event.target.value,
                     currentValue => { event.target.value = currentValue }
                 );
             }
-        }, true);
+        });
     },
 
     _createKeys() {
@@ -99,27 +103,22 @@ const Keyboard = {
     },
 
     _triggerEvent(handlerName) {
-        if (typeof this.eventHandlers[handlerName] !== "function") {
-            console.log(this.eventHandlers[handlerName]);
-            return;
-        }
-        this.eventHandlers[handlerName](this.selectedValue);
+        // console.log('key event', this.eventHandlers[handlerName]);
+        if (this.eventHandlers[handlerName] === null) return;
+        if (typeof this.eventHandlers[handlerName] === "function")
+            this.eventHandlers[handlerName](this.selectedValue);
     },
 
     open(initialValue, oninputHandler, oncloseHandler) {
         this.selectedValue = initialValue || "";
         this.eventHandlers.oninput = oninputHandler;
-        // this.eventHandlers.onclose = oncloseHandler;
     },
 
     close() {
-        this.selectedValue = "";
-        this.eventHandlers.oninput = null;
-        // this.eventHandlers.onclose = onclose;
+        // console.log('close');
+        Keyboard.eventHandlers.oninput = null;
     }
 };
 
-setTimeout(function () {
-    console.log("###### Keyboard -  The page has loaded succ.");
-    Keyboard.init();
-}, 500);
+console.log("###### Keyboard - The page has loaded succ.");
+Keyboard.init('.mb-3');
