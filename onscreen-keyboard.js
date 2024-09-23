@@ -1,19 +1,16 @@
 const Keyboard = {
-    selectedValue: "",
     elements: {
         main: null,
-        keysContainer: null,
-        keys: []
-    },
-    eventHandlers: {
-        oninput: null,
-        onclose: null
+        keysContainer: null
     },
     keyLayout: [
         ["7", "8", "9", "+"],
         ["4", "5", "6", "backspace"],
         ["1", "2", "3", "0"]
     ],
+
+    oninputHandler: null,
+    selectedValue: "",
 
     init(inputContainer) {
         // Create main elements
@@ -40,6 +37,7 @@ const Keyboard = {
                 );
             }
         });
+        console.log("###### Keyboard available now.");
     },
 
     _createKeys() {
@@ -90,7 +88,7 @@ const Keyboard = {
 
                         keyElement.addEventListener("click", () => {
                             this.selectedValue += key;
-                            this._triggerEvent("oninput");
+                            this._triggerEvent();
                         });
                         break;
                 }
@@ -102,23 +100,18 @@ const Keyboard = {
         return fragment;
     },
 
-    _triggerEvent(handlerName) {
-        // console.log('key event', this.eventHandlers[handlerName]);
-        if (this.eventHandlers[handlerName] === null) return;
-        if (typeof this.eventHandlers[handlerName] === "function")
-            this.eventHandlers[handlerName](this.selectedValue);
+    _triggerEvent() {
+        if (this.oninputHandler === null) return;
+        if (typeof this.oninputHandler === "function")
+            this.oninputHandler(this.selectedValue);
     },
 
-    open(initialValue, oninputHandler, oncloseHandler) {
+    open(initialValue, handler) {
         this.selectedValue = initialValue || "";
-        this.eventHandlers.oninput = oninputHandler;
+        this.oninputHandler = handler;
     },
 
     close() {
-        // console.log('close');
-        Keyboard.eventHandlers.oninput = null;
+        Keyboard.oninputHandler = null;
     }
 };
-
-console.log("###### Keyboard - The page has loaded succ.");
-Keyboard.init('.mb-3');
