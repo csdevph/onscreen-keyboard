@@ -9,7 +9,7 @@ const Keyboard = {
         ["1", "2", "3", "0"]
     ],
 
-    oninputHandler: null,
+    selectedTarget: null,
     selectedValue: "",
 
     init(inputContainer) {
@@ -27,15 +27,12 @@ const Keyboard = {
         this.elements.main.appendChild(this.elements.keysContainer);
         document.querySelector('body').appendChild(this.elements.main);
 
-        document.body.addEventListener('click', this.close);
+        document.addEventListener('click', this.unplug);
 
         document.querySelector(inputContainer).addEventListener('click', function (event) {
-            if (event.target.matches('.use-keyboard')) {
-                event.stopPropagation();
-                Keyboard.open(event.target.value,
-                    currentValue => { event.target.value = currentValue }
-                );
-            }
+            if (!event.target.matches('.use-keyboard')) return;
+            event.stopPropagation();
+            Keyboard.plugInto(event.target);
         });
         console.log("###### Keyboard available now.");
     },
@@ -62,7 +59,7 @@ const Keyboard = {
 
                         keyElement.addEventListener("click", () => {
                             this.selectedValue = this.selectedValue.substring(0, this.selectedValue.length - 1);
-                            this._triggerEvent("oninput");
+                            this.triggerInputEvent();
                         });
                         break;
 
@@ -71,7 +68,7 @@ const Keyboard = {
 
                         keyElement.addEventListener("click", () => {
                             this.selectedValue += "\n";
-                            this._triggerEvent("oninput");
+                            this.triggerInputEvent();
                         });
                         break;
 
@@ -79,7 +76,7 @@ const Keyboard = {
                         keyElement.innerHTML = createIconHTML("check_circle");
 
                         keyElement.addEventListener("click", () => {
-                            this.close();
+                            this.unplug();
                         });
                         break;
 
@@ -88,7 +85,7 @@ const Keyboard = {
 
                         keyElement.addEventListener("click", () => {
                             this.selectedValue += key;
-                            this._triggerEvent();
+                            this.triggerInputEvent();
                         });
                         break;
                 }
@@ -100,18 +97,17 @@ const Keyboard = {
         return fragment;
     },
 
-    _triggerEvent() {
-        if (this.oninputHandler === null) return;
-        if (typeof this.oninputHandler === "function")
-            this.oninputHandler(this.selectedValue);
+    triggerInputEvent() {
+        if (this.selectedTarget === null) return;
+        this.selectedTarget.value = this.selectedValue
     },
 
-    open(initialValue, handler) {
-        this.selectedValue = initialValue || "";
-        this.oninputHandler = handler;
+    plugInto(target) {
+        this.selectedTarget = target;
+        this.selectedValue = target.value || "";
     },
 
-    close() {
-        Keyboard.oninputHandler = null;
+    unplug() {
+        Keyboard.selectedTarget = null;
     }
 };
