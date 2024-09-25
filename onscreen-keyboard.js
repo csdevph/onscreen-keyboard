@@ -99,8 +99,16 @@ const Keyboard = {
     },
 
     triggerInputEvent() {
+        const evt = new InputEvent("input", {
+            bubbles: true,      // default: false
+            cancelable: true,   // default: false
+            view: window        // default: null
+        });
+
         if (this.selectedTarget === null) return;
+
         this.selectedTarget.value = this.selectedValue
+        this.selectedTarget.dispatchEvent(evt);
     },
 
     plugInto(target) {
