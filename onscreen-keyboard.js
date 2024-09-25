@@ -32,6 +32,7 @@ const Keyboard = {
         document.querySelector(inputContainer).addEventListener('click', function (event) {
             if (!event.target.matches('.use-keyboard')) return;
             event.stopPropagation();
+            event.target.readOnly = true;
             Keyboard.plugInto(event.target);
         });
         console.log("###### Keyboard available now.");
