@@ -29,7 +29,7 @@ const Keyboard = {
 
         document.addEventListener('click', this.unplug);
 
-        document.querySelector(inputContainer).addEventListener('click', function (event) {
+        document.querySelector(inputContainer).addEventListener('click', (event) => {
             if (!event.target.matches('.use-keyboard')) return;
             event.stopPropagation();
             event.target.readOnly = true;
@@ -112,8 +112,8 @@ const Keyboard = {
     },
 
     plugInto(target) {
-        this.selectedTarget = target;
-        this.selectedValue = target.value || "";
+        Keyboard.selectedTarget = target;
+        Keyboard.selectedValue = target.value || "";
     },
 
     unplug() {
