@@ -120,3 +120,7 @@
     /* margin-left: -22px !important; */
     margin-right: 33px !important;
 }
+
+.input--focus {
+    background-color: greenyellow !important;
+}

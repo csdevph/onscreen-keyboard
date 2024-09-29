@@ -85,6 +85,10 @@ const Keyboard = {
                         keyElement.textContent = key;
 
                         keyElement.addEventListener("click", () => {
+                            if (!this.selectedTarget ||
+                                (this.selectedTarget.maxLength > 0
+                                    && this.selectedValue.length >= this.selectedTarget.maxLength))
+                                return;
                             this.selectedValue += key;
                             this.triggerInputEvent();
                         });
@@ -108,15 +112,20 @@ const Keyboard = {
         if (this.selectedTarget === null) return;
 
         this.selectedTarget.value = this.selectedValue
+        // fix : si un caractère est rejeté en raison du type de <input>
+        if (this.selectedTarget.value !== this.selectedValue) this.selectedValue = '';
         this.selectedTarget.dispatchEvent(evt);
     },
 
     plugInto(target) {
+        Keyboard.unplug();
         Keyboard.selectedTarget = target;
+        Keyboard.selectedTarget.classList.toggle('input--focus', true);
         Keyboard.selectedValue = target.value || "";
     },
 
     unplug() {
+        if (Keyboard.selectedTarget) Keyboard.selectedTarget.classList.toggle('input--focus', false);
         Keyboard.selectedTarget = null;
     }
 };
