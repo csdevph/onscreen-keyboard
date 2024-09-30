@@ -9,6 +9,7 @@ const Keyboard = {
         ["1", "2", "3", "0"]
     ],
 
+    functionKeyHandler: null,
     selectedTarget: null,
 
     init(inputContainer) {
@@ -63,13 +64,10 @@ const Keyboard = {
                         });
                         break;
 
-                    case "enter":
-                        keyElement.innerHTML = createIconHTML("keyboard_return");
+                    case "+":
+                        keyElement.textContent = key;
 
-                        keyElement.addEventListener("click", () => {
-                            this.selectedTarget.value += "\n";
-                            this.triggerInputEvent();
-                        });
+                        keyElement.addEventListener("click", this.functionKeyHandler);
                         break;
 
                     case "done":
