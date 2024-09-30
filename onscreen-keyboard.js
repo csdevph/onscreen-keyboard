@@ -10,7 +10,6 @@ const Keyboard = {
     ],
 
     selectedTarget: null,
-    selectedValue: "",
 
     init(inputContainer) {
         // Create main elements
@@ -59,7 +58,7 @@ const Keyboard = {
                         keyElement.innerHTML = createIconHTML("backspace");
 
                         keyElement.addEventListener("click", () => {
-                            this.selectedValue = this.selectedValue.substring(0, this.selectedValue.length - 1);
+                            this.selectedTarget.value = this.selectedTarget.value.substring(0, this.selectedTarget.value.length - 1);
                             this.triggerInputEvent();
                         });
                         break;
@@ -68,7 +67,7 @@ const Keyboard = {
                         keyElement.innerHTML = createIconHTML("keyboard_return");
 
                         keyElement.addEventListener("click", () => {
-                            this.selectedValue += "\n";
+                            this.selectedTarget.value += "\n";
                             this.triggerInputEvent();
                         });
                         break;
@@ -87,9 +86,9 @@ const Keyboard = {
                         keyElement.addEventListener("click", () => {
                             if (!this.selectedTarget ||
                                 (this.selectedTarget.maxLength > 0
-                                    && this.selectedValue.length >= this.selectedTarget.maxLength))
+                                    && this.selectedTarget.value.length >= this.selectedTarget.maxLength))
                                 return;
-                            this.selectedValue += key;
+                            this.selectedTarget.value += key;
                             this.triggerInputEvent();
                         });
                         break;
@@ -109,11 +108,8 @@ const Keyboard = {
             view: window        // default: null
         });
 
-        if (this.selectedTarget === null) return;
+        if (!this.selectedTarget) return;
 
-        this.selectedTarget.value = this.selectedValue
-        // fix : si un caractère est rejeté en raison du type de <input>
-        if (this.selectedTarget.value !== this.selectedValue) this.selectedValue = '';
         this.selectedTarget.dispatchEvent(evt);
     },
 
@@ -121,11 +117,11 @@ const Keyboard = {
         Keyboard.unplug();
         Keyboard.selectedTarget = target;
         Keyboard.selectedTarget.classList.toggle('input--focus', true);
-        Keyboard.selectedValue = target.value || "";
     },
 
     unplug() {
-        if (Keyboard.selectedTarget) Keyboard.selectedTarget.classList.toggle('input--focus', false);
+        if (Keyboard.selectedTarget)
+            Keyboard.selectedTarget.classList.toggle('input--focus', false);
         Keyboard.selectedTarget = null;
     }
 };
