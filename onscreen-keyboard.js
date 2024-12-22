@@ -1,10 +1,6 @@
 const Keyboard = {
-    elements: {
-        main: null,
-        keysContainer: null
-    },
     keyLayout: [
-        ["7", "8", "9", "+"],
+        ["7", "8", "9", "add"],
         ["4", "5", "6", "backspace"],
         ["1", "2", "3", "0"]
     ],
@@ -13,19 +9,12 @@ const Keyboard = {
     selectedTarget: null,
 
     init(inputContainer) {
-        // Create main elements
-        this.elements.main = document.createElement("div");
-        this.elements.keysContainer = document.createElement("div");
-
-        // Setup main elements
-        this.elements.main.addEventListener("click", (e) => { e.stopPropagation() });
-        this.elements.main.classList.add("keyboard");
-        this.elements.keysContainer.classList.add("keyboard__keys");
-
-        // setup Keyboard
-        this.elements.keysContainer.appendChild(this._createKeys());
-        this.elements.main.appendChild(this.elements.keysContainer);
-        document.querySelector('body').appendChild(this.elements.main);
+        // Create keyboard elements
+        const keysContainer = document.createElement("div");
+        keysContainer.classList.add("keyboard");
+        keysContainer.addEventListener("click", (e) => { e.stopPropagation() });
+        keysContainer.appendChild(this._createKeys());
+        document.querySelector('body').appendChild(keysContainer);
 
         document.addEventListener('click', this.unplug);
 
@@ -35,7 +24,7 @@ const Keyboard = {
             event.target.readOnly = true;
             Keyboard.plugInto(event.target);
         });
-        console.log("###### Keyboard available now.");
+        console.log("### Keyboard available now...");
     },
 
     _createKeys() {
@@ -57,7 +46,6 @@ const Keyboard = {
                 switch (key) {
                     case "backspace":
                         keyElement.innerHTML = createIconHTML("backspace");
-
                         keyElement.addEventListener("click", () => {
                             if (!this.selectedTarget) return;
                             this.selectedTarget.value = this.selectedTarget.value.substring(0, this.selectedTarget.value.length - 1);
@@ -65,23 +53,13 @@ const Keyboard = {
                         });
                         break;
 
-                    case "+":
+                    case "add":
                         keyElement.innerHTML = createIconHTML("add");
-
                         keyElement.addEventListener("click", this.functionKeyHandler);
-                        break;
-
-                    case "done":
-                        keyElement.innerHTML = createIconHTML("check_circle");
-
-                        keyElement.addEventListener("click", () => {
-                            this.unplug();
-                        });
                         break;
 
                     default:
                         keyElement.textContent = key;
-
                         keyElement.addEventListener("click", () => {
                             if (!this.selectedTarget) return;
 
@@ -96,7 +74,6 @@ const Keyboard = {
                         break;
                 }
                 fragment.appendChild(keyElement);
-
             });
             fragment.appendChild(document.createElement("br"));
         });
@@ -111,7 +88,6 @@ const Keyboard = {
         });
 
         if (!this.selectedTarget) return;
-
         this.selectedTarget.dispatchEvent(evt);
     },
 
