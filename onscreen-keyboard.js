@@ -11,10 +11,10 @@ const Keyboard = {
     init(inputContainer) {
         // Create keyboard elements
         const keysContainer = document.createElement("div");
-        keysContainer.classList.add("keyboard");
+        keysContainer.classList.add("w-11/12", "divide-y-2", "bg-slate-400", "mx-auto", "my-1");
         keysContainer.addEventListener("click", (e) => { e.stopPropagation() });
         keysContainer.appendChild(this._createKeys());
-        document.querySelector('body').appendChild(keysContainer);
+        document.body.lastElementChild.appendChild(keysContainer);
 
         document.addEventListener('click', this.unplug);
 
@@ -32,16 +32,18 @@ const Keyboard = {
 
         // Creates HTML for an icon
         const createIconHTML = (icon_name) => {
-            return `<svg class="svg-icon"><title>${icon_name}</title><use href="sprite.svg#${icon_name}"></use></svg>`;
+            return `<svg class="fill-blue-800 size-6 m-auto"><title>${icon_name}</title><use href="sprite.svg#${icon_name}"></use></svg>`;
         };
 
         this.keyLayout.forEach(keyRow => {
+            const keyboardRow = document.createElement("div");
+            keyboardRow.classList.add("divide-x-2", "flex");
             keyRow.forEach(key => {
                 const keyElement = document.createElement("button");
 
                 // Add attributes/classes
                 keyElement.setAttribute("type", "button");
-                keyElement.classList.add("keyboard__key");
+                keyElement.classList.add("w-1/4");
 
                 switch (key) {
                     case "backspace":
@@ -73,9 +75,9 @@ const Keyboard = {
                         });
                         break;
                 }
-                fragment.appendChild(keyElement);
+                keyboardRow.appendChild(keyElement)
+                fragment.appendChild(keyboardRow);
             });
-            fragment.appendChild(document.createElement("br"));
         });
         return fragment;
     },
@@ -94,12 +96,12 @@ const Keyboard = {
     plugInto(target) {
         Keyboard.unplug();
         Keyboard.selectedTarget = target;
-        Keyboard.selectedTarget.classList.toggle('input--focus', true);
+        Keyboard.selectedTarget.classList.toggle('bg-yellow-200', true);
     },
 
     unplug() {
         if (Keyboard.selectedTarget)
-            Keyboard.selectedTarget.classList.toggle('input--focus', false);
+            Keyboard.selectedTarget.classList.toggle('bg-yellow-200', false);
         Keyboard.selectedTarget = null;
     }
 };

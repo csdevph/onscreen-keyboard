@@ -6,10 +6,10 @@
   <title>Clavier virtuel</title>
 
   <script src="onscreen-keyboard.js"></script>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="output.css">
 </head>
 
-<body>
+<body class="bg-slate-300">
 
   <div class="mb-3">
     <input type="text" class="use-keyboard" placeholder="Email">
@@ -29,8 +29,9 @@
     <input type="text" inputmode="numeric" pattern="[0-9]*">
     <button>Go</button>
   </div>
-
+  <div class="fixed bottom-0 w-full">
+    <script>Keyboard.init('.mb-3')</script>
+  </div>
 </body>
-<script>Keyboard.init('.mb-3')</script>
 
 </html>
