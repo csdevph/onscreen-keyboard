@@ -37,7 +37,7 @@ const Keyboard = {
 
         this.keyLayout.forEach(keyRow => {
             const keyboardRow = document.createElement("div");
-            keyboardRow.classList.add("divide-x-2", "flex");
+            keyboardRow.classList.add("divide-x-2", "flex", "h-10");
             keyRow.forEach(key => {
                 const keyElement = document.createElement("button");
 
