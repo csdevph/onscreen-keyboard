@@ -96,12 +96,12 @@ const Keyboard = {
     plugInto(target) {
         Keyboard.unplug();
         Keyboard.selectedTarget = target;
-        Keyboard.selectedTarget.classList.toggle('bg-yellow-200', true);
+        Keyboard.selectedTarget.classList.add('bg-yellow-200', '[outline:auto]');
     },
 
     unplug() {
         if (Keyboard.selectedTarget)
-            Keyboard.selectedTarget.classList.toggle('bg-yellow-200', false);
+            Keyboard.selectedTarget.classList.remove('bg-yellow-200', '[outline:auto]');
         Keyboard.selectedTarget = null;
     }
 };

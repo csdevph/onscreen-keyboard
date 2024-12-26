@@ -635,3 +635,7 @@ video {
 .fill-blue-800 {
   fill: #1e40af;
 }
+
+.\[outline\:auto\] {
+  outline: auto;
+}
