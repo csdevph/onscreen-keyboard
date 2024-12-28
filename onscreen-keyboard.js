@@ -11,7 +11,7 @@ const Keyboard = {
     init(inputContainer) {
         // Create keyboard elements
         const keysContainer = document.createElement("div");
-        keysContainer.classList.add("w-11/12", "divide-y-2", "bg-slate-400", "mx-auto", "my-1");
+        keysContainer.classList.add("mx-auto", "h-full", "w-11/12", "divide-y-2", "bg-slate-400");
         keysContainer.addEventListener("click", (e) => { e.stopPropagation() });
         keysContainer.appendChild(this._createKeys());
         document.body.lastElementChild.appendChild(keysContainer);
@@ -37,7 +37,7 @@ const Keyboard = {
 
         this.keyLayout.forEach(keyRow => {
             const keyboardRow = document.createElement("div");
-            keyboardRow.classList.add("divide-x-2", "flex", "h-10");
+            keyboardRow.classList.add("flex", "h-1/3", "divide-x-2");
             keyRow.forEach(key => {
                 const keyElement = document.createElement("button");
 
