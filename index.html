@@ -11,9 +11,9 @@
 
 <body class="bg-slate-300">
 
-  <div class="mb-3">
+  <div class="my-form space-y-1 p-1">
     <input type="text" class="use-keyboard" placeholder="Email">
-    <input type="number" class="use-keyboard" placeholder="Phone number" maxlength="1">
+    <input type="number" class="use-keyboard" placeholder="Single digit" maxlength="1">
     <input type="number" class="use-keyboard" maxlength="3" oninput="console.log('zozo '+this.value)">
     <button>Go</button>
   </div>
@@ -30,7 +30,7 @@
     <button>Go</button>
   </div>
   <div class="fixed bottom-0 w-full py-1 h-24">
-    <script>Keyboard.init('.mb-3')</script>
+    <script>Keyboard.init('.my-form')</script>
   </div>
 </body>
 
