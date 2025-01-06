@@ -30,11 +30,6 @@ const Keyboard = {
     _createKeys() {
         const fragment = document.createDocumentFragment();
 
-        // Creates HTML for an icon
-        const createIconHTML = (icon_name) => {
-            return `<svg class="fill-blue-800 size-6 m-auto"><title>${icon_name}</title><use href="sprite.svg#${icon_name}"></use></svg>`;
-        };
-
         this.keyLayout.forEach(keyRow => {
             const keyboardRow = document.createElement("div");
             keyboardRow.classList.add("flex", "h-1/3", "divide-x-2");
@@ -96,12 +91,17 @@ const Keyboard = {
     plugInto(target) {
         Keyboard.unplug();
         Keyboard.selectedTarget = target;
-        Keyboard.selectedTarget.classList.add('bg-yellow-200', '[outline:auto]');
+        Keyboard.selectedTarget.classList.add('!bg-yellow-200', '[outline:auto]');
     },
 
     unplug() {
         if (Keyboard.selectedTarget)
-            Keyboard.selectedTarget.classList.remove('bg-yellow-200', '[outline:auto]');
+            Keyboard.selectedTarget.classList.remove('!bg-yellow-200', '[outline:auto]');
         Keyboard.selectedTarget = null;
     }
+};
+
+// Creates HTML for an icon
+const createIconHTML = (icon_name) => {
+    return `<svg class="fill-blue-800 size-6 m-auto"><title>${icon_name}</title><use href="sprite.svg#${icon_name}"></use></svg>`;
 };
